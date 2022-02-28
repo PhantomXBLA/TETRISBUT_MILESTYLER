@@ -37,6 +37,13 @@ public class ButtonController : MonoBehaviour
 
     public void backButtonPressed()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
+        
+    }
+
+    public void creditsButtonPressed()
+    {
+        SceneManager.LoadScene(3);
     }
 }

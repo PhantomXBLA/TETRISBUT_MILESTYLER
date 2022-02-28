@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,12 +14,6 @@ public class GameManager : MonoBehaviour
      GameObject currentPiece;
      GameObject nextPiece;
 
-    //[SerializeField]
-    //GameObject previousPiece1;
-    //[SerializeField]
-    //GameObject previousPiece2;
-
-
     Vector3 spawn;
     Vector3 nextPieceSpawn;
 
@@ -29,10 +24,28 @@ public class GameManager : MonoBehaviour
 
     Vector3 raycastHitPoint;
 
+    bool paused = false;
+
+    public GameObject pauseCanvas;
+    public GameObject winCanvas;
+    public GameObject loseCanvas;
+
+    int score = 0;
+    int scoreObjective = 3000;
+
+    bool win;
+    bool lose;
+
+    float timeLeft = 120;
+
+    public AudioSource dropSound;
+
+    public TextMeshProUGUI scoreLabel;
+    public TextMeshProUGUI timeLabel;
     // Start is called before the first frame update
     void Start()
     {
-
+        Time.timeScale = 1;
         spawn = new Vector3(-5, 19, 0);
         nextPieceSpawn = new Vector3(8.5f, 14f, 0f);
 
@@ -56,6 +69,25 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(score >= scoreObjective)
+        {
+            Time.timeScale = 0;
+            endGame();
+        }
+
+        timeLeft -= Time.deltaTime;
+        timeLabel.text = timeLeft.ToString("F0");
+
+        if (timeLeft <= 0 && win != true)
+        {
+            endGame();
+        }
+
+        if(currentPiece.transform.position.y >= 20)
+        {
+            endGame();
+        }
+
 
        if(currentPiece.transform.position.y < 14)
         {
@@ -63,29 +95,6 @@ public class GameManager : MonoBehaviour
             {
                 collider.enabled = true;
             }
-        }
-
-        if (Input.GetKeyDown("e"))
-        {
-            currentPiece.transform.Rotate(new Vector3(0, 0, Vector3.up.x + -90), Space.World); // had to use vector 3 up since it would not rotate cleanly 
-        }
-
-
-        if (Input.GetKeyDown("q"))
-        {
-            currentPiece.transform.Rotate(new Vector3(0, 0, Vector3.up.x + 90), Space.World); // had to use vector 3 up since it would not rotate cleanly 
-        }
-
-
-        if (Input.GetKeyDown("space"))
-        {
-            foreach(BoxCollider collider in currentPiece.GetComponents<Collider>())
-            {
-                collider.enabled = true;
-            }
-            currentPiece.GetComponent<Rigidbody>().useGravity = true;
-
-            convertNextPieceToActive();
         }
     }
 
@@ -112,15 +121,6 @@ public class GameManager : MonoBehaviour
         return pieceToSpawn;
 
     }
-
-    GameObject generatePiece()
-    {
-        GameObject piece = unusedTetrominos[Random.Range(0, Tetrominos.Count)];
-
-        return piece;
-
-    }
-
     void generatePieceBoundaryNegative()
     {
 
@@ -154,12 +154,9 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void movePieceDown()
-    {
-        currentPiece.transform.position = new Vector3(currentPiece.transform.position.x, currentPiece.transform.position.y - 1, currentPiece.transform.position.z);
-    }
+    //************************************INPUT SYSTEM*********************************
 
-   public void OnMoveRight()
+    public void OnMoveRight()
     {
         //Debug.Log(currentPiece.gameObject);
         generatePieceBoundaryNegative();
@@ -181,7 +178,64 @@ public class GameManager : MonoBehaviour
         }
     }
 
-  
+    public void OnPlace()
+    {
+        foreach (BoxCollider collider in currentPiece.GetComponents<Collider>())
+        {
+            collider.enabled = true;
+        }
+        currentPiece.GetComponent<Rigidbody>().useGravity = true;
+
+        convertNextPieceToActive();
+
+        score += 150;
+        scoreLabel.text = score.ToString();
+        dropSound.Play();
+    }
+
+    public void OnRotateRight()
+    {
+        currentPiece.transform.Rotate(new Vector3(0, 0, Vector3.up.x + -90), Space.World); // had to use vector 3 up since it would not rotate cleanly 
+        float rotation = currentPiece.transform.rotation.z;
+
+        if (currentPiece.transform.rotation.z == rotation || currentPiece.tag != "Square")
+        {
+            Debug.Log("rotated");
+            currentPiece.transform.position = new Vector3(currentPiece.transform.position.x + 0.5f, currentPiece.transform.position.y, 0);
+        }
+    }
+
+    public void OnRotateLeft()
+    {
+        currentPiece.transform.Rotate(new Vector3(0, 0, Vector3.up.x + 90), Space.World); // had to use vector 3 up since it would not rotate cleanly 
+
+        float rotation = currentPiece.transform.rotation.z;
+
+        if (currentPiece.transform.rotation.z == rotation || currentPiece.tag != "Square")
+        {
+            Debug.Log("rotated");
+            currentPiece.transform.position = new Vector3(currentPiece.transform.position.x - 0.5f, currentPiece.transform.position.y, 0);
+        }
+    }
+
+    public void OnPause()
+    {
+        paused = !paused;
+
+        if (paused == true)
+        {
+            Time.timeScale = 0;
+            pauseCanvas.SetActive(true);
+        }
+
+        if(paused == false)
+        {
+            Time.timeScale = 1;
+            pauseCanvas.SetActive(false);
+        }
+    }
+
+  //************************************INPUT SYSTEM*********************************
 
     void convertNextPieceToActive()
     {
@@ -198,6 +252,23 @@ public class GameManager : MonoBehaviour
 
         nextPiece = spawnPiece(nextPieceSpawn);
 
+    }
+
+   public void endGame()
+    {
+        if (score >= scoreObjective)
+        {
+            win = true;
+            winCanvas.SetActive(true);
+            Time.timeScale = 0;
+        }
+
+        if(score < scoreObjective)
+        {
+            lose = true;
+            loseCanvas.SetActive(true);
+            Time.timeScale = 0;
+        }
     }
 
     private void OnDrawGizmos()
