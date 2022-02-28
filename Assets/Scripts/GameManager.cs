@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     public GameObject loseCanvas;
 
     int score = 0;
-    int scoreObjective = 3000;
+    int scoreObjective = 4200;
 
     bool win;
     bool lose;

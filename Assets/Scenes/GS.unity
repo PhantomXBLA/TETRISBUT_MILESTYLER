@@ -3115,7 +3115,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Score 3000 points
+  m_text: Score 4200 points
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 867b96cb6edba8f4daa6ea2977d0cc92, type: 2}
   m_sharedMaterial: {fileID: 2868150922973294121, guid: 867b96cb6edba8f4daa6ea2977d0cc92, type: 2}
