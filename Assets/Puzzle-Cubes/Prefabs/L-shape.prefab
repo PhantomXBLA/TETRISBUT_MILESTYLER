@@ -12,10 +12,13 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   - component: {fileID: 9500000}
-  - component: {fileID: 6437986}
+  - component: {fileID: -4422166368035908758}
+  - component: {fileID: 6037885915244765995}
+  - component: {fileID: 7692901297896248308}
+  - component: {fileID: 767756837044154986}
   m_Layer: 0
   m_Name: L-shape
-  m_TagString: Untagged
+  m_TagString: LJ
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,8 +105,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!64 &6437986
-MeshCollider:
+--- !u!54 &-4422166368035908758
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 122
+  m_CollisionDetection: 1
+--- !u!65 &6037885915244765995
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -111,8 +130,32 @@ MeshCollider:
   m_GameObject: {fileID: 100000}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.9661387, y: 3, z: 1}
+  m_Center: {x: 0.49739987, y: 0, z: 0}
+--- !u!65 &7692901297896248308
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.9796891, y: 1.0024713, z: 1}
+  m_Center: {x: -0.49798775, y: -0.99876434, z: 0}
+--- !u!114 &767756837044154986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: e1f66ea4545c0374fa809f9d3b3b5340, type: 3}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab15be556c303ef45af5dcdb71a09f11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
